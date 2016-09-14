@@ -1,0 +1,57 @@
+apply plugin: 'scala'
+
+
+repositories {
+    mavenCentral()
+    maven {
+        url 'http://repository.excilys.com/content/groups/public'
+    }
+}
+
+dependencies {
+    testCompile 'io.gatling.highcharts:gatling-charts-highcharts:2.2.2'
+}
+
+sourceSets {
+    test {
+        scala {
+            srcDirs "src/test/scala"
+        }
+        resources {
+            srcDirs "src/test/resources"
+        }
+    }
+}
+
+task seedData(type: Exec) {
+    commandLine 'src/scripts/seed-data.sh'
+}
+
+task gatling(type: JavaExec) {
+    dependsOn testClasses
+    dependsOn seedData
+    description = "load test with Gatling"
+    group = "Load Test"
+    classpath = sourceSets.test.runtimeClasspath
+    jvmArgs = [
+            // workaround for https://github.com/gatling/gatling/issues/2689
+            "-Dgatling.core.directory.binaries=${sourceSets.test.output.classesDir.toString()}",
+            "-Dlogback.configurationFile=${logbackGatlingConfig()}",
+    ]
+    main = "io.gatling.app.Gatling"
+    args = [
+            "--simulation", "simulations.GroceryOrder",
+            "--results-folder", "${buildDir}/gatling-results",
+            "--binaries-folder", sourceSets.test.output.classesDir.toString(), // ignored because of above bug
+            "--bodies-folder", sourceSets.test.resources.srcDirs.toList().first().toString() + "/gatling/bodies",
+    ]
+}
+
+def logbackGatlingConfig() {
+    return sourceSets.test.resources.find { it.name == 'logback-gatling.xml' };
+}
+
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.10'
+}
