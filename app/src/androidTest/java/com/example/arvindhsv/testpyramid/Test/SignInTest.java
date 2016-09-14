@@ -47,6 +47,13 @@ public class SignInTest {
     }
 
     @Test
+    public void checkIfTheUserIsAbleToEnterMoreThan5DigitsOfDate() {
+        signInPage
+                .giveInvalidEmpIdAndClickSignIn("123456789")
+                .verifyEmpIdFieldValue("123456789");
+    }
+
+    @Test
     public void giveValidEmpIdCheckIfEmpNameGetsDisplayedInWelcomePage() {
         signInPage
                 .giveValidEmpIdAndClickSignIn("13426")

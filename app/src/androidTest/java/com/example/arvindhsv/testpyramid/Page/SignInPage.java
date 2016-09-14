@@ -38,4 +38,9 @@ public class SignInPage {
         onView(withId(R.id.indicator_for_error)).check(matches(isDisplayed()));
         return this;
     }
+
+    public SignInPage verifyEmpIdFieldValue(String empId) {
+        onView(withId(R.id.emp_Id)).check(matches(withText(empId)));
+        return this;
+    }
 }

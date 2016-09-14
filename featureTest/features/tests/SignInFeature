@@ -1,0 +1,14 @@
+Feature: SignInFeature
+
+  Background:
+    When Backend Services are started
+    And Created db is pushed to emulator
+
+  Scenario: On giving valid emp id checking if user goes to welcome page with emp name getting displayed
+    Given User is in Signin Page
+    When User enters emp id "13426" and clicks on "Sign In" button
+    Then User should navigate welcome page
+    And User should see emp name "Arvind" getting displayed
+    When User clicks on LogOut Button
+    Then User should see total time he logged in minutes
+    And User should see thank you message getting displayed
