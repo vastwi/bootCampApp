@@ -4,6 +4,7 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.example.arvindhsv.testpyramid.Page.SignInPage;
+import com.example.arvindhsv.testpyramid.Page.WelcomePage;
 import com.example.arvindhsv.testpyramid.SignInActivity;
 
 import org.junit.Rule;
@@ -15,6 +16,14 @@ public class SignInTest {
     @Rule
     public final ActivityTestRule main = new ActivityTestRule(SignInActivity.class, true, true);
     private SignInPage signInPage = new SignInPage();
+    private WelcomePage welcomePage = new WelcomePage();
+
+    @Test
+    public void checkErrorMessageAppearsWithWarningIcon() {
+        signInPage
+                .giveInvalidEmpIdAndClickSignIn("112")
+                .checkIfWarningIconAppearsWithError();
+    }
 
     @Test
     public void givingEmptyEmpIdCheckIfErrorAppears() {
@@ -28,13 +37,6 @@ public class SignInTest {
         signInPage
                 .clickOnSignIn()
                 .checkIfErrorMessageAppearsAs("This field is required");
-    }
-
-    @Test
-    public void checkErrorMessageAppearsWithWarningIcon() {
-        signInPage
-                .giveInvalidEmpIdAndClickSignIn("112")
-                .checkIfWarningIconAppearsWithError();
     }
 
     @Test
@@ -55,8 +57,11 @@ public class SignInTest {
 
     @Test
     public void giveValidEmpIdCheckIfEmpNameGetsDisplayedInWelcomePage() {
+//        RecordedRequest employeeNameRequest = mockServer.expectRequest("emp_id_13426.yml");
         signInPage
-                .giveValidEmpIdAndClickSignIn("13426")
+                .giveValidEmpIdAndClickSignIn("13426");
+//        employeeNameRequest.waitUntilMatched();
+        welcomePage
                 .checkIfUserIsInWelcomePage()
                 .checkIfEmpNameGetsDisplayedAs("Arvind");
     }

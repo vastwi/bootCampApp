@@ -1,0 +1,9 @@
+request:
+    url: ^/boot_camp_service/candidates/{candidateId}/login$
+    method: PUT
+
+response:
+    status: 200
+    headers:
+        "content-type": application/json
+    body: "{\"candidate_id\":13426,\"candidate_name\":Arvind}"

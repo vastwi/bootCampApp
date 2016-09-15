@@ -13,10 +13,10 @@ class SignIn extends Simulation {
   private val employeeDetailsSeed: RecordSeqFeederBuilder[String] = csv("employee_details.csv")
 
   val signInScenario = scenario("SignIn with EmpId and check for employeeName result")
-    .feed(csv("employees.csv").circular)
+    .feed(csv("employee_details.csv").circular)
     .exec(
       http("signIn")
-        .put(stringToExpression("/boot_camp_service/empId/${emp_id}.json"))
+        .put(stringToExpression("/boot_camp_service/candidates/{candidateId}/login"))
         .check(status.in(200 to 210))
         // if required can add some assertions like checking employee name that is returned
     )
